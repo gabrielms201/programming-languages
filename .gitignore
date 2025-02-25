@@ -1,0 +1,4 @@
+Leiningen.gitignore
+*.cpcache
+*.vscode
+*.vscode/*
