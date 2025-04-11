@@ -2,3 +2,8 @@ Leiningen.gitignore
 *.cpcache
 *.vscode
 *.vscode/*
+.clj-kondo
+.calva
+.exercism
+.lsp
+.cpcache
