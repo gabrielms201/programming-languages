@@ -5,16 +5,22 @@
   "Takes a string representing a log line
    and returns its message with whitespace trimmed."
   [s]
-  (str/trim (str/replace s #"\[\w+\]: ", "")))
+  (-> s
+      (str/replace #"\[\w+\]: ", "")
+      (str/trim)))
 
 (defn log-level
   "Takes a string representing a log line
    and returns its level in lower-case."
   [s]
-  (str/lower-case (str/trim (str/replace s #"\[(\w+)\]: .*" "$1"))))
+  (-> s
+      (str/replace #"\[(\w+)\]: .*" "$1")
+      (str/trim)
+      (str/lower-case))
+  )
 
 (defn reformat
   "Takes a string representing a log line and formats it
    with the message first and the log level in parentheses."
   [s]
-  (str (message s) " (" (log-level s) ")"))
+  ((message s) " (" (log-level s) ")"))
