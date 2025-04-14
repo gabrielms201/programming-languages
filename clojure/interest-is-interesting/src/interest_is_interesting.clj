@@ -26,7 +26,7 @@
   "Returns how much money to donate based on the balance and the tax-free percentage."
   [balance tax-free-percentage]
   (cond
-    (>= balance 0) (int (math/floor (* balance (/ tax-free-percentage 100) 2)))
+    (>= balance 0) (int  (* balance (/ tax-free-percentage 100) 2))
     :else 0)
 )
   
