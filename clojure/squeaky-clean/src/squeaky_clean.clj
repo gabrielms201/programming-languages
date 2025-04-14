@@ -1,18 +1,15 @@
 (ns squeaky-clean
   (:require [clojure.string :as str]))
 
-
 (defn clean-iso-control [s] (apply str (map #(if (Character/isISOControl %) "CTRL" (str %)) s)))
 
 (defn clean-not-letters [s] (apply str (map #(if (or (Character/isLetter %) (= % \_)) % "") s)))
 
-
 (defn is-greek-letter [c]
   (let [charAsInt (int c)]
     (and (>= charAsInt 945) (<= charAsInt 969))))
-(defn clean-greek-letter [s] (apply str (map #(if (is-greek-letter %) "" (str %)) s)))
 
-  
+(defn clean-greek-letter [s] (apply str (map #(if (is-greek-letter %) "" (str %)) s)))
 
 (defn convert-kebab-to-camel
   [s]
