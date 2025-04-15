@@ -7,8 +7,6 @@
   (fn [x y]
     [(+ x dx) (+ y dy)]))
 
-
-
 (defn scale2d
   "Returns a function making use of a closure to
    perform a repeatable 2d scale of a coordinate pair."
@@ -38,5 +36,4 @@
         @memo
         (let [result (f a b)]
           (reset! lastInput [a b])
-          (reset! memo result)
-          result)))))
+          (reset! memo result))))))
