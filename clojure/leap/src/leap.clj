@@ -1,6 +1,6 @@
 (ns leap)
 (defn is-number-divisible-by? [by number]
-  (= (mod number by) 0))
+  (zero? (mod number by)))
 (defn leap-year?
   "Determine if a year is a leap year"
   [year]
