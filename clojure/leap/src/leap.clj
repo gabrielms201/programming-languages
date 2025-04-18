@@ -9,6 +9,4 @@
    (is-number-divisible-by? 4 year)
    (or 
     (not (is-number-divisible-by? 100 year))
-    (is-number-divisible-by? 400 year))
-   )
-  )
+    (is-number-divisible-by? 400 year))))
