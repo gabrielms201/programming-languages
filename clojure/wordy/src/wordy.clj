@@ -20,24 +20,14 @@
   (let [[_ first-term operation second-term] (re-find #"(\d+|\-\d+) (.*) (\d+|\-\d+)" expr)]
     ((ops operation) (stoi first-term) (stoi second-term))))
 
-;; (defn calculate [expr]
-;;   (let [[head & tail] (get-form-from-expression expr)]
-;;     (case
-;;      (is-number? head) (calculate-two-term expr)
-;;      (aaa? head) (evaluate-expr (str/join " " (cons (str (calculate-two-term head)) tail))))))
-    
-    
 (defn get-form-from-expression [expr]
   (rest (re-find #"(.+) (plus|minus|divided by|multiplied by) (.+)" expr)))
 
-(defn is-simple-expression? [expr]
-  (boolean (re-matches #"(\d+|\-\d+) (plus|minus|divided by|multiplied by) (\d+|\-\d+)" expr)))
-
 (defn calculate [expr]
   (let [[head & tail] (get-form-from-expression expr)]
-    (cond
-      (is-number? head) (calculate-two-term expr)
-      :else (evaluate-expr (str/join " " (cons (str (evaluate-expr head)) tail))))))
+    (if (is-number? head) 
+      (calculate-two-term expr)
+      (evaluate-expr (str/join " " (cons (str (evaluate-expr head)) tail))))))
     
 
 (defn evaluate-expr
