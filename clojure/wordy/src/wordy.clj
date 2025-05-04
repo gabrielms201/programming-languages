@@ -9,19 +9,20 @@
 
 (def ops {"minus" -
           "plus" +
-          "divided by" /})
+          "divided by" /
+          "multiplied by" *})
 
-(defn is-number? [s] (boolean (re-matches #"\d+" s)))
+(defn is-number? [s] (boolean (re-matches #"\d+|\-\d+" s)))
 (defn stoi [s] (Integer/parseInt s))
 
 
 (defn calculate-two-term [expr]
-  (let [[_ first-term operation second-term] (re-find #"(\d+) (.*) (\d+)" expr)]
+  (let [[_ first-term operation second-term] (re-find #"(\d+|\-\d+) (.*) (\d+|\-\d+)" expr)]
     ((ops operation) (stoi first-term) (stoi second-term))))
 
 (defn calculate [expr]
-  (let [[head & tail]  (rest (re-find #"(.+) (plus|minus|divided by) (.+)" expr))]
-    (if (re-matches #"(\d+) (plus|minus|divided by) (\d+)" head)
+  (let [[head & tail]  (rest (re-find #"(.+) (plus|minus|divided by|multiplied by) (.+)" expr))]
+    (if (re-matches #"(\d+|\-\d+) (plus|minus|divided by|multiplied by) (\d+|\-\d+)" head)
       (calculate (str/join " " (cons (str (calculate-two-term head)) tail)))
       (calculate-two-term expr) 
       )))
