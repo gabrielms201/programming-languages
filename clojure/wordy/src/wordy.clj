@@ -32,8 +32,8 @@
   (boolean (ops (str/trim (apply str (re-seq #"\D+" expr))))))
 
 (defn get-form-from-expression [expr]
-  ;;<op> ::= <n> <plus> <n> 
-  ;;<op> ::= <n> <plus> <op>
+  ;;<op> ::= <n> <plus|minus|divided by|multiplied by> <n> 
+  ;;<op> ::= <n> <plus|minus|divided by|multiplied by> <op>
   (let [result (re-find #"(.+) (plus|minus|divided by|multiplied by) (.+)" expr)]
     (when (nil? result)
       (if (is-valid-operation? expr)
