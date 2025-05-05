@@ -6,6 +6,8 @@
 
 (declare evaluate-expr calculate)
 
+(def invalid-syntax (IllegalArgumentException. "syntax error"))
+(def invalid-operation (IllegalArgumentException. "unknown operation"))
 
 (def ops {"minus" -
           "plus" +
@@ -13,22 +15,37 @@
           "multiplied by" *})
 
 (defn is-number? [s] (boolean (re-matches #"\d+|\-\d+" s)))
-(defn stoi [s] (Integer/parseInt s))
+
+(defn stoi [s] 
+  (when (not (is-number? s))
+    (throw invalid-syntax))
+  (Integer/parseInt s))
 
 
 (defn calculate-two-term [expr]
-  (let [[_ first-term operation second-term] (re-find #"(\d+|\-\d+) (.*) (\d+|\-\d+)" expr)]
+  (let [[_ first-term operation second-term :as expr_re] 
+        (re-matches #"(\d+|\-\d+) (plus|minus|divided by|multiplied by) (\d+|\-\d+)" expr)]
+    (when (not expr_re) (throw invalid-syntax))
     ((ops operation) (stoi first-term) (stoi second-term))))
 
+(defn is-valid-operation? [expr]
+  (boolean (ops (str/trim (apply str (re-seq #"\D+" expr))))))
+
 (defn get-form-from-expression [expr]
-  (rest (re-find #"(.+) (plus|minus|divided by|multiplied by) (.+)" expr)))
+  ;;<op> ::= <n> <plus> <n> 
+  ;;<op> ::= <n> <plus> <op>
+  (let [result (re-find #"(.+) (plus|minus|divided by|multiplied by) (.+)" expr)]
+    (when (nil? result)
+      (if (is-valid-operation? expr)
+        (throw invalid-syntax)
+        (throw invalid-operation)))
+    (rest result)))
 
 (defn calculate [expr]
   (let [[head & tail] (get-form-from-expression expr)]
-    (if (is-number? head) 
+    (if (is-number? head)
       (calculate-two-term expr)
       (evaluate-expr (str/join " " (cons (str (evaluate-expr head)) tail))))))
-    
 
 (defn evaluate-expr
   "Evaluates a simple expr"
@@ -37,18 +54,14 @@
     (stoi expr)
     (calculate expr)))
 
-  (defn evaluate
-    "Evaluates a simple math problem"
-    [question]
-    (some->> question
-        (re-find #"What is (.+)\?")
-        second
-        evaluate-expr))
+(defn evaluate
+  "Evaluates a simple math problem"
+  [question]
+  
+  (or
+   (some->> question
+            (re-find #"What is (.+)\?")
+            second
+            evaluate-expr)
+   (throw invalid-syntax)))
 
-
-  (str
-   (= (evaluate "What is 5 minus 13?") -8) "--"
-   (= (evaluate "What is 5 plus 13?") 18) "--"
-   (= (evaluate "What is 5?") 5) "--"
-   (= (evaluate "What is 25 divided by 5?") 5) "--"
-   (= (evaluate "What is 5 plus 13 plus 6?") 24) "---")

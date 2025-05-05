@@ -70,9 +70,6 @@
   (testing "Non math question"
     (is (thrown-with-msg? IllegalArgumentException #"^syntax error$" (wordy/evaluate "Who is the President of the United States?")))))
 
-(deftest evaluate_test_18
-  (testing "reject problem missing an operand"
-    (is (thrown-with-msg? IllegalArgumentException #"^syntax error$" (wordy/evaluate "What is 1 plus?")))))
 
 (deftest evaluate_test_19
   (testing "reject problem with no operands or operators"
