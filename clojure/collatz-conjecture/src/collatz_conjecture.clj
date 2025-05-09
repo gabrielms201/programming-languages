@@ -10,5 +10,3 @@
 
 (defn collatz [num]
   (acc num 0))
-
-
