@@ -62,9 +62,6 @@
   (testing "reverse sorted input"
     (is (= ['(1 2 3 4 5) 5 '()] (sorting/partition-aux [5 4 3 2 1] 5 [] [])))))
 
-
-;;
-
 (deftest evaluate_test_16
   (testing "simple half partition"
     (is (= ['(1) 2 '(3)] (sorting/partition-middle [3 2 1])))))
