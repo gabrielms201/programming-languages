@@ -1,36 +1,36 @@
 (ns all-your-base)
 (require '[clojure.math :as math])
 
-(defn convert-decimal-to-base [base-input number]
-  (if (zero? number) '(0)
+(defn convert-decimal-to-base [base-input digits]
+  (if (zero? digits) '(0)
       (loop [baseInput base-input
-             number number
+             digits digits
              acc '()]
-        (let [result (quot number baseInput)]
-          (if (zero? number) acc
+        (let [result (quot digits baseInput)]
+          (if (zero? digits) acc
               (recur baseInput
                      result
-                     (conj acc (mod number baseInput))))))))
+                     (conj acc (mod digits baseInput))))))))
 
-(defn has-valid-digits? [number base-input base-output]
+(defn is-valid-input? [digits base-input base-output]
   (and 
-   (not-any? neg? number)
-   (every? #(< % base-input) number)
+   (not-any? neg? digits)
+   (every? #(< % base-input) digits)
    (not (<= base-input 1 ))
    (not (<= base-output 1))))
 
-(defn from-base-to-decimal [base-input number]
-    (loop [i (dec (count number))
+(defn from-base-to-decimal [base-input digits]
+    (loop [i (dec (count digits))
             baseInput base-input
-            [head & tail :as number] number
+            [head & tail :as digits] digits
             acc 0]
-       (if (empty? number) (int acc)
+       (if (empty? digits) (int acc)
            (recur (dec i) baseInput tail (+ acc (* head (math/pow baseInput i)))))))
   
 
-(defn convert [base-input number base-output]
-  (when (has-valid-digits? number base-input base-output)
-    (if (empty? number) '()
-        (some->> number
+(defn convert [base-input digits base-output]
+  (when (is-valid-input? digits base-input base-output)
+    (if (empty? digits) '()
+        (some->> digits
             (from-base-to-decimal base-input)
             (convert-decimal-to-base base-output)))))
