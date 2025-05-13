@@ -7,4 +7,6 @@
   (-> phrase
       str/upper-case
       (str/split #" |-|_")
-      (->> (map first) (apply str))))
+      (->>
+       (map first)
+       (apply str))))
