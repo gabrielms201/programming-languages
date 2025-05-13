@@ -1,6 +1,6 @@
 (ns space-age)
 
-(def conversions {:Mercury 0.2408467
+(def planet-scale {:Mercury 0.2408467
                   :Venus 0.61519726
                   :Earth 1.0
                   :Mars 1.8808158
@@ -10,7 +10,7 @@
                   :Neptune 164.79132})
 
 (defn parse [seconds, planet]
-  (->> (/ seconds (*  31557600M (conversions planet)))
+  (->> (/ seconds (*  31557600M (planet-scale planet)))
        (with-precision 4 :rounding CEILING)
        (double)))
 
