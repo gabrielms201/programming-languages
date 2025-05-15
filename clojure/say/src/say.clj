@@ -1,26 +1,28 @@
 (ns say)
 
 (def map-units {0 "zero"
-                  1 "one"
-                  2 "two"
-                  3 "three"
-                  4 "four"
-                  5 "five"
-                  6 "six"
-                  7 "seven"
-                  8 "eight"
-                  9 "nine"} )
+                1 "one"
+                2 "two"
+                3 "three"
+                4 "four"
+                5 "five"
+                6 "six"
+                7 "seven"
+                8 "eight"
+                9 "nine"})
 
 (def map-teens {10 "ten"
-              11 "eleven"
-              12 "twelve"
-              13 "thirteen"
-              14 "fourteen"
-              15 "fifteen"
-              16 "sixteen"
-              17 "seventeen"
-              18 "eighteen"
-              19 "nineteen"})
+                11 "eleven"
+                12 "twelve"
+                13 "thirteen"
+                14 "fourteen"
+                15 "fifteen"
+                16 "sixteen"
+                17 "seventeen"
+                18 "eighteen"
+                19 "nineteen"})
+
+
 
 (def map-tens {2 "twenty"
                3 "thirty"
@@ -33,7 +35,7 @@
 
 (defn convert-tens [tens-digit last-digit]
   (if (zero? last-digit)
-    (map-tens tens-digit) 
+    (map-tens tens-digit)
     (str (map-tens tens-digit) "-" (map-units last-digit))))
 
 (def negative-number-exception
@@ -50,10 +52,28 @@
    (map reverse)
    (map #(Integer/parseInt (apply str %)))))
 
+
+(defn say 
+  ([thousand hundred] (str thousand " thousand " hundred))
+  ([million thousand hundred] (str million " million " thousand " thousand " hundred))
+  )
+
+(defn say-2 
+  ([hundred] (say-2 nil nil nil hundred))
+  ([thousand hundred] (say-2 nil nil thousand hundred))
+  ([million thousand hundred] (say-2 nil million thousand hundred))
+  ([billion million thousand hundred] 
+  (cond-> nil
+    (some? billion) (str billion " billion " )
+    (some? million) (str million " million " ) 
+    (some? thousand) (str thousand " thousand ") 
+    (some? hundred) (str hundred) 
+     )))
+
 (defn number [num]
   (when (neg? num) (throw negative-number-exception))
   (let [last-digit (mod num 10)
         tens-digit (quot num 10)]
-    (cond 
+    (cond
       (< num 20) (or (map-units num) (map-teens num))
       (< num 100) (convert-tens tens-digit last-digit))))
