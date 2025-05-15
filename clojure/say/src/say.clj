@@ -39,6 +39,17 @@
 (def negative-number-exception
   (IllegalArgumentException. "Input number must be positive"))
 
+
+(defn break [num]
+  (->>
+   (str num)
+   (map #(Character/digit % 10))
+   (reverse)
+   (partition  3 3 nil)
+   (reverse)
+   (map reverse)
+   (map #(Integer/parseInt (apply str %)))))
+
 (defn number [num]
   (when (neg? num) (throw negative-number-exception))
   (let [last-digit (mod num 10)
