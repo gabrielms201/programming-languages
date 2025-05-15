@@ -1,4 +1,5 @@
-(ns say)
+(ns say
+  (:require [clojure.string :as str]))
 
 (def map-units {0 "zero"
                 1 "one"
@@ -22,8 +23,6 @@
                 18 "eighteen"
                 19 "nineteen"})
 
-
-
 (def map-tens {2 "twenty"
                3 "thirty"
                4 "forty"
@@ -38,36 +37,47 @@
     (map-tens tens-digit)
     (str (map-tens tens-digit) "-" (map-units last-digit))))
 
-(def negative-number-exception
-  (IllegalArgumentException. "Input number must be positive"))
-
+(def negative-number-exception (IllegalArgumentException. "Input number must be positive"))
 
 (defn break [num]
   (->>
    (str num)
    (map #(Character/digit % 10))
    (reverse)
-   (partition  3 3 nil)
+   (partition 3 3 nil)
    (reverse)
    (map reverse)
    (map #(Integer/parseInt (apply str %)))))
 
+(defn arrange-partition-parts
+  ([num]
+   (when (> (count num) 4)
+     (throw (IllegalArgumentException. "Too many partitions")))
+     (let [[hundred thousand million billion] (concat (reverse num) (repeat "zero"))]
+       (str/join " "
+          (cond-> []
+            (not= "zero" billion) (conj (str billion " billion"))
+            (not= "zero" million) (conj (str million " million"))
+            (not= "zero" thousand) (conj (str thousand " thousand"))
+            (not= "zero" hundred) (conj (str hundred)))))))
 
-(defn say 
-  ([hundred] (say nil nil nil hundred))
-  ([thousand hundred] (say nil nil thousand hundred))
-  ([million thousand hundred] (say nil million thousand hundred))
-  ([billion million thousand hundred] 
-  (cond-> ""
-    (some? billion) (str billion " billion " )
-    (some? million) (str million " million " ) 
-    (some? thousand) (str thousand " thousand ") 
-    (some? hundred) (str hundred))))
+  (defn say-up-to-hundred [num]
+    (let [last-digit (mod num 10)
+          tens-digit (quot num 10)
+          hundreds-digit (quot num 100)]
+      (cond
+        (< num 20) (or (map-units num) (map-teens num))
+        (< num 100) (convert-tens tens-digit last-digit)
+        (and (<= num 999) (zero? last-digit)) (str (map-units hundreds-digit) " hundred")
+        (<= num 999) (str (map-units hundreds-digit) " hundred " (say-up-to-hundred (mod num 100)))
+        :else "")))
 
-(defn number [num]
-  (when (neg? num) (throw negative-number-exception))
-  (let [last-digit (mod num 10)
-        tens-digit (quot num 10)]
-    (cond
-      (< num 20) (or (map-units num) (map-teens num))
-      (< num 100) (convert-tens tens-digit last-digit))))
+  (defn number [num]
+    (when (neg? num) (throw negative-number-exception))
+    (if (zero? num) "zero"
+        (some->> num
+            break
+            (map say-up-to-hundred)
+            (arrange-partition-parts))))
+
+
