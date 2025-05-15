@@ -54,21 +54,15 @@
 
 
 (defn say 
-  ([thousand hundred] (str thousand " thousand " hundred))
-  ([million thousand hundred] (str million " million " thousand " thousand " hundred))
-  )
-
-(defn say-2 
-  ([hundred] (say-2 nil nil nil hundred))
-  ([thousand hundred] (say-2 nil nil thousand hundred))
-  ([million thousand hundred] (say-2 nil million thousand hundred))
+  ([hundred] (say nil nil nil hundred))
+  ([thousand hundred] (say nil nil thousand hundred))
+  ([million thousand hundred] (say nil million thousand hundred))
   ([billion million thousand hundred] 
-  (cond-> nil
+  (cond-> ""
     (some? billion) (str billion " billion " )
     (some? million) (str million " million " ) 
     (some? thousand) (str thousand " thousand ") 
-    (some? hundred) (str hundred) 
-     )))
+    (some? hundred) (str hundred))))
 
 (defn number [num]
   (when (neg? num) (throw negative-number-exception))
