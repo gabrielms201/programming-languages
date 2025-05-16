@@ -24,11 +24,7 @@
   ;; function body
   )
 
-(defn apply-to-each
-  "Given a function and a vector, it returns the vector of the results of applying function(item) on all items"
-  [f coll]
-  ;; function body
-  )
+
 
 (defn foldl
   "Given a function, a vector, and initial accumulator, it folds (reduces) each item into the accumulator from the left"
@@ -51,6 +47,11 @@
          tail (last coll)]
      (if (empty? coll) acc
          (recur f head (f acc tail))))))
+
+(defn apply-to-each
+  "Given a function and a vector, it returns the vector of the results of applying function(item) on all items"
+  [f coll]
+  (foldr #(conj %1 (f %2)) coll '()))
 
 (defn reverse-order
   "Given a vector, it returns a vector with all the original items, but in reverse order"
