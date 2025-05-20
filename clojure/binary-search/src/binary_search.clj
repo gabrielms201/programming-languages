@@ -10,5 +10,5 @@
     (cond 
       (= element num) pivot
       (>= low high) -1
-      (<= element num) (recur (inc pivot) high)
+      (> num element) (recur (inc pivot) high)
       :else (recur low (dec pivot))))))
