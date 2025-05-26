@@ -7,6 +7,8 @@
 
 (defn resistor-value
   "Returns the resistor value based on the given colors"
-  [[first second]]
-    (-> (str (colors-map first) (colors-map second))
-        (read-string)))
+  [colors]
+  (->> (take 2 colors)
+       (map colors-map)
+       (apply str)
+       (read-string)))
