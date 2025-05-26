@@ -8,7 +8,7 @@
 (defn resistor-value
   "Returns the resistor value based on the given colors"
   [colors]
-  (->> (take 2 colors)
-       (map colors-map)
-       (apply str)
-       (read-string)))
+  (let [xform (comp (take 2) (map colors-map) )]
+    (->> colors
+         (transduce xform str "") 
+         (read-string))))
