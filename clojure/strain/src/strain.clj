@@ -1,6 +1,6 @@
 (ns strain)
 
-(defn my-non-lazy-seq
+(defn my-non-lazy-sequence
   [xform coll]
   (loop [[head & tail] coll 
          acc []]
@@ -20,7 +20,7 @@
           (rf acc input)
           acc)))))
   ([pred coll]
-   (my-non-lazy-seq (retain pred) coll)))
+   (my-non-lazy-sequence (retain pred) coll)))
 
 (defn discard
   "Removes the items in coll for which (pred item) returns true."
@@ -34,4 +34,4 @@
            acc
            (rf acc input))))))
    ([pred coll]
-    (my-non-lazy-seq (discard pred) coll)))
+    (my-non-lazy-sequence (discard pred) coll)))
