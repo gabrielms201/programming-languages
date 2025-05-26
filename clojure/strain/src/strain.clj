@@ -25,13 +25,6 @@
 (defn discard
   "Removes the items in coll for which (pred item) returns true."
   ([pred]
-    (fn [rf]
-      (fn
-        ([] (rf))
-        ([acc] (rf acc))
-        ([acc input]
-         (if (pred input)
-           acc
-           (rf acc input))))))
+    (retain (complement pred)))
    ([pred coll]
     (my-non-lazy-sequence (discard pred) coll)))
