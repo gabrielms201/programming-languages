@@ -1,11 +1,11 @@
 (ns eliuds-eggs)
 
 (defn decimal-to-little-endian-bin [num]
-(if (zero? num) [0]
   (loop [q num
          acc []]
-    (if (= 1 q) (conj acc (mod q 2))
-        (recur (quot q 2) (conj acc (mod q 2)))))))
+    (if (pos? q) 
+      (recur (quot q 2) (conj acc (mod q 2))) 
+      acc)))
 
 (defn egg-count
   "Returns the number of 1 bits in the binary representation of the given number."
