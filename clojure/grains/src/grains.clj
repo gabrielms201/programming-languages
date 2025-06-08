@@ -19,9 +19,8 @@
 
 ;;--- O(1)
 
-(def one-as-big-integer (BigInteger. "1"))
 (defn power-of-two [n]
-  (.shiftLeft one-as-big-integer n))
+  (.shiftLeft BigInteger/ONE n))
 
 (defn square
   "Returns the number of grains on the n-th chessboard square."
